@@ -1,0 +1,145 @@
+#Integración Culqi
+
+##Crear token de tarjeta:
+POST https://secure.culqi.com/v2/tokens
+Headers:
+'Content-Type': 'application/json',
+'Authorization': `Bearer PUBLIC-KEY`
+
+Body:
+JSON
+{
+  "card_number": "4111111111111111", //Número de tarjeta
+  "cvv": "123", //CVV de la tarjeta
+  "expiration_month": 9, //Mes de expiración de la tarjeta
+  "expiration_year": "2024", //Año de expiración de la tarjeta
+  "email": "sample@email.com" //Email
+}
+
+Response:
+{
+    "metadata": {},
+    "card_number": "41111111****1111",
+    "last_four": "1111",
+    "active": true,
+    "client": {
+        "device_fingerprint": null,
+        "ip_country_code": "PE",
+        "ip": "179.6.211.36",
+        "browser": "Desconocido",
+        "ip_country": "Peru",
+        "device_type": "Escritorio"
+    },
+    "id": "tkn_test_rSE6wfETYrCH1A7U", // Token utilizado para generar un cargo
+    "creation_date": 1689917498685,
+    "type": "card",
+    "email": "sample@email.com",
+    "object": "token",
+    "iin": {
+        "installments_allowed": [],
+        "bin": "41111111",
+        "card_category": null,
+        "card_brand": "Visa",
+        "card_type": "Crédito",
+        "issuer": {
+            "country": "PERU",
+            "country_code": "PE",
+            "website": "https://www.chase.com",
+            "name": "JPMORGAN CHASE BANK, N.A.",
+            "phone_number": "+ (1) 212-270-6000"
+        },
+        "object": "iin"
+    }
+}
+
+##Crear cargo:
+POST https://api.culqi.com/v2/charges
+Headers:
+'Content-Type': 'application/json',
+'Authorization': `Bearer SECRET-KEY`
+
+Body:
+JSON
+{
+  "amount": "10000", //Monto a cobrar *100
+  "currency_code": "PEN", //Código de moneda
+  "email": "sample@email.com", //Email del cliente
+  "source_id": "tkn_test_A3VRmt6rOjXmIsAY", //Id del objeto token generado anteriormente
+}
+
+Response:
+{
+    "object": "charge",
+    "id": "chr_test_8CM7NrelBlvoZMPh",
+    "creation_date": 1689916033045,
+    "amount": 10000,
+    "amount_refunded": 0,
+    "current_amount": 10000,
+    "installments": 0,
+    "installments_amount": null,
+    "currency_code": "PEN",
+    "email": "sample@email.com",
+    "description": null,
+    "source": {
+        "object": "token",
+        "id": "tkn_test_A3VRmt6rOjXmIsAY",
+        "type": "card",
+        "creation_date": 1689916010000,
+        "email": "sample@email.com",
+        "card_number": "41111111****1111",
+        "last_four": "1111",
+        "active": false,
+        "iin": {
+            "object": "iin",
+            "bin": "41111111",
+            "card_brand": "Visa",
+            "card_type": "Crédito",
+            "card_category": null,
+            "issuer": {
+                "name": "JPMORGAN CHASE BANK, N.A.",
+                "country": "PERU",
+                "country_code": "PE",
+                "website": "https://www.chase.com",
+                "phone_number": "+ (1) 212-270-6000"
+            },
+            "installments_allowed": []
+        },
+        "client": {
+            "ip": "179.6.211.36",
+            "ip_country": "Peru",
+            "ip_country_code": "PE",
+            "browser": "Desconocido",
+            "device_fingerprint": null,
+            "device_type": "Escritorio"
+        },
+        "metadata": {}
+    },
+    "outcome": {
+        "type": "venta_exitosa", //Estado de la transacción
+        "code": "AUT0000",
+        "merchant_message": "La operación de venta ha sido autorizada exitosamente",
+        "user_message": "Su compra ha sido exitosa."
+    },
+    "fraud_score": null,
+    "dispute": false,
+    "capture": true,
+    "capture_date": 1689916033045,
+    "reference_code": "820744453830",
+    "authorization_code": "fBNNHU",
+    "duplicated": false,
+    "metadata": {},
+    "total_fee": 0,
+    "fee_details": {
+        "fixed_fee": {},
+        "variable_fee": {
+            "currency_code": "PEN",
+            "commision": 0.0344,
+            "total": 0
+        }
+    },
+    "total_fee_taxes": 0,
+    "transfer_amount": 0,
+    "paid": false,
+    "statement_descriptor": "CULQI*",
+    "transfer_id": null
+}

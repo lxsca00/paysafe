@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pago</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        min-height: 100vh;
+      }
+      button {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-light d-flex flex-column justify-content-center align-items-center"
+  >
+    <main class="container">
+      <h1 class="text-center mb-4">Pago</h1>
+      <form class="form" action="/charge" method="post">
+        <input
+          class="form-control mb-2"
+          type="text"
+          name="card_number"
+          placeholder="Número de tarjeta"
+          pattern="[0-9]{16}"
+          maxlength="16"
+          autocomplete="off"
+        />
+        <input
+          class="form-control mb-2"
+          type="text"
+          name="cvv"
+          pattern="[0-9]{3}"
+          maxlength="3"
+          placeholder="CVV"
+          autocomplete="off"
+        />
+        <div class="d-flex mb-2 gap-3">
+          <input class="form-control" name="expiration_month" placeholder="MM" pattern="[1-9]|1[0-2]" maxlength="2"/>
+        <input class="form-control" name="expiration_year" placeholder="YYYY" pattern="20(23|[3-9]\d|\d{3,})" maxlength="4"/>
+        </div>
+        <input
+          class="form-control mb-4"
+          name="email"
+          type="email"
+          placeholder="Email"
+        />
+        <button class="btn btn-primary">
+          Pagar <%- orderData.amount -%> <%- orderData.currency -%>
+        </button>
+      </form> 
+    </main>
+
+    <%- include ('partials/_footer') -%>
+  </body>
+</html>
